@@ -99,3 +99,17 @@ def compile(pofix):
             nfastack.append(nfa(initial, accept))
 
     return nfastack.pop()
+
+def followes(state):
+
+    states = set()
+    states.add(state)
+
+    if state.label is None:
+        if state.edge1 is not None:
+            states |= followes(state.edge1)
+      
+        if state.edge2 is not None:
+            states |= followes(state.edge2)
+
+    return states
