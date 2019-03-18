@@ -113,3 +113,24 @@ def followes(state):
             states |= followes(state.edge2)
 
     return states
+
+def match(infix, string):
+
+    postfix = shunt(infix)
+    nfa = compile(postfix)
+
+  
+    current = set()
+    nexts = set()
+
+    current |= followes(nfa.initial)
+
+    for s in string:
+        for c in current:
+            if c.label == s:
+                nexts |= followes(c.edge1)
+
+        current = nexts
+        nexts = set()
+
+    return (nfa.accept in current)
