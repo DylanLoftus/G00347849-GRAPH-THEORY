@@ -134,3 +134,11 @@ def match(infix, string):
         nexts = set()
 
     return (nfa.accept in current)
+
+
+infixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
+strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
+
+for i in infixes:
+    for s in strings:
+        print(match(i, s), i , s)
