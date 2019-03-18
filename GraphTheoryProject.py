@@ -26,4 +26,8 @@ def shunt(infix):
         else:
             pofix = pofix + c
 
+    while stack:
+        pofix = pofix + stack[-1]
+        stack = stack[:-1]
+
     return pofix
