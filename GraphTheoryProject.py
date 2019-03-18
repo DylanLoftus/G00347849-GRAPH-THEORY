@@ -10,5 +10,20 @@ def shunt(infix):
     stack = ""
     pofix = ""
     
+    for c in infix:
+        if c == '(':
+            stack = stack + c
+        elif c == ')':
+            while stack[-1] != '(':
+                pofix = pofix + stack[-1]
+                stack = stack[:-1]
+            stack = stack[:-1]
+        elif  c in specials:
+            while stack and specials.get(c, 0) <= specials.get(stack[-1], 0):
+                pofix = pofix + stack[-1]
+                stack = stack[:-1]
+            stack = stack + c
+        else:
+            pofix = pofix + c
 
     return pofix
