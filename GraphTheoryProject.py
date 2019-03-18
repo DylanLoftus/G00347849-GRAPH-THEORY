@@ -32,4 +32,17 @@ def shunt(infix):
 
     return pofix
 
-print(shunt("(a.b)|(c*.d)"))
+
+class state:
+    label = None
+    edge1 = None
+    edge2 = None
+
+
+class nfa:
+    initial = None
+    accept = None
+
+    def __init__(self, initial, accept):
+        self.initial = initial
+        self.accept = accept
