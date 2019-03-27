@@ -2,6 +2,7 @@
     References : https://web.microsoftstream.com/video/5e2a482a-b1c9-48a3-b183-19eb8362abc9
                  https://web.microsoftstream.com/video/cfc9f4a2-d34f-4cde-afba-063797493a90
                  https://web.microsoftstream.com/video/6b4ba6a4-01b7-4bde-8f85-b4b96abc902a
+                 https://swtch.com/~rsc/regexp/regexp1.html
 '''
 
 # Dylan Loftus
@@ -12,7 +13,7 @@
 def shunt(infix):
 
     # List of special characters and their precedence.
-    specials = {'*': 60, '+':50, '.': 40, '|': 30}
+    specials = {'*': 70, '+':60, '?':50, '.': 40, '|': 30}
 
     # Empty stack
     stack = ""
@@ -129,7 +130,7 @@ def compile(pofix):
 
             # Append to stack a new nfa.
             nfastack.append(nfa(initial, accept))
-        elif c == '+':
+        elif c == '?':
             # Pop 1 item off of the stack
             nfa1 = nfastack.pop()
           
@@ -140,8 +141,23 @@ def compile(pofix):
             # Join inital edge 1 to nfa1's initial state
             initial.edge1 = nfa1.initial
             # Join inital edge 2 to accept state
-            initial.edge2 = nfa1.initial
+            initial.edge2 = accept
+            # Join nfa1's accept edge 2 to the accept state
+            nfa1.accept.edge2 = accept
 
+            # Append to stack a new nfa.
+            nfastack.append(nfa(initial, accept))
+        elif c == '+':
+            # Pop 1 item off of the stack
+            nfa1 = nfastack.pop()
+          
+            # Create a state initial and accept
+            initial = state()
+            accept = state()
+      
+            # Join inital edge 1 to nfa1's initial state
+            initial.edge1 = nfa1.initial
+        
             # Join nfa1's accept edge 1 to nfa1's initial state
             nfa1.accept.edge1 = nfa1.initial
             # Join nfa1's accept edge 2 to the accept state
@@ -207,15 +223,23 @@ def match(infix, string):
     # Check if we are in the accept state and return true if yes and false if no
     return (nfa.accept in current)
 
-# List of infix regular expressions
-infixes = ["a.b.c*","b.c.a.b+", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c", "a.b+.d"]
-# List of strings
-strings = ["", "abc", "abbc", "abcc", "abad", "abbbc", "abbbbbbd", "abd", "bcabbbb"]
+cont = "y"
 
-# Loop over the infixes 
-for i in infixes:
-    # Loop over the strings 
-    for s in strings:
-        # Print out the result of matching the regular expression to the string
-        print(match(i, s),"|",i,"|",s,'|')
+# While loop to keep the program running
+while cont.casefold() == "y":
+
+    # Ask user for regular expression
+    infixes =  input("Enter a regular expression: ")
+    # Ask user for string
+    strings =  input("Enter a string: ")
+
+    # Print out the result of matching the regular expression to the string
+    print(match(infixes, strings),"|",infixes,"|",strings,'|')
+
+    # Ask the user if they want to continue with the program
+    cont = input("Continue? Y for yes, N for no: ")
+
+
+
+
         
