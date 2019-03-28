@@ -200,6 +200,7 @@ def match(infix, string):
     
     # Change infix reg expression to postfix by calling shunt method
     postfix = shunt(infix)
+    print(postfix)
     # Then compile that postfix reg expression to an nfa
     nfa = compile(postfix)
 
@@ -226,6 +227,7 @@ def match(infix, string):
 cont = "y"
 
 # While loop to keep the program running
+# Casefold() means case is ignored
 while cont.casefold() == "y":
 
     # Ask user for regular expression
